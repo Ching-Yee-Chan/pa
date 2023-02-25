@@ -48,7 +48,21 @@ static int cmd_si(char *args) {
   else {
     sscanf(arg, "%d", &count);
   }
-    printf("\n%d", count);
+  cpu_exec(count);
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  /* extract the first argument */
+  char *arg = strtok(NULL, " ");
+
+  if (strcmp(arg, "r") == 0) {  //print register
+    printf("eax\t%x\t%d\n", cpu.eax, cpu.eax);
+  }
+  else {
+    // sscanf(arg, "%d", &count);
+  }
+  // cpu_exec(count);
   return 0;
 }
 
@@ -65,7 +79,7 @@ static struct {
 
   /* TODO: Add more commands */
   { "si", "Execute and pause after N commands, N is set to 1 as default", cmd_si },
-  // { "info", "Display register status (r) or information of the watching points (w)", cmd_info },
+  { "info", "Display register status (r) or information of the watching points (w)", cmd_info },
   // { "p", "Caluculate the value of the expression", cmd_p },
   // { "x", "Memory scanning", cmd_x },
   // { "w", "Set a watching point", cmd_w },
