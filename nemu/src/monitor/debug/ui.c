@@ -67,10 +67,31 @@ static int cmd_info(char *args) {
     printf("esp\t0x%x\t%d\n", cpu.esp, cpu.esp);
     printf("eip\t0x%x\t0x%x\n", cpu.eip, cpu.eip);
   }
-  else {
-    // sscanf(arg, "%d", &count);
+  else if(strcmp(arg, "w") == 0){
+    // TODO
   }
-  // cpu_exec(count);
+  else{
+    printf("Invalid arguments\n");
+  }
+  return 0;
+}
+
+static int cmd_x(char *args) {
+  /* extract the first argument */
+  char *arg1 = strtok(NULL, " ");
+  char *arg2 = strtok(NULL, " ");
+
+  if (arg1 == NULL || arg2 == NULL) {
+    /* no argument given */
+    printf("Invalid arguments\n");
+    return 0;
+  }
+  else {
+    int count, start;
+    sscanf(arg1, "%d", &count);
+    sscanf(arg2, "%x", &start);
+    printf("%d\n%x\n", count, start);
+  }
   return 0;
 }
 
@@ -89,7 +110,7 @@ static struct {
   { "si", "Execute and pause after N commands, N is set to 1 as default", cmd_si },
   { "info", "Display register status (r) or information of the watching points (w)", cmd_info },
   // { "p", "Caluculate the value of the expression", cmd_p },
-  // { "x", "Memory scanning", cmd_x },
+  { "x", "Memory scanning", cmd_x },
   // { "w", "Set a watching point", cmd_w },
   // { "d", "Delete a watching point", cmd_d },
 };
