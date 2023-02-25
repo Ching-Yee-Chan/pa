@@ -92,7 +92,7 @@ static int cmd_x(char *args) {
     sscanf(arg1, "%d", &count);
     sscanf(arg2, "%x", &addr);
     for(;count>0;count--){
-      printf("0x%x\t0x%x", addr, vaddr_read(addr, 1));
+      printf("0x%x\t0x%x\n", addr, vaddr_read(addr, 4));
       addr += 4;
     }
   }
