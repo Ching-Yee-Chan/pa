@@ -2,6 +2,7 @@
 #include "monitor/expr.h"
 #include "monitor/watchpoint.h"
 #include "nemu.h"
+#include "memory.h"
 
 #include <stdlib.h>
 #include <readline/readline.h>
@@ -87,10 +88,13 @@ static int cmd_x(char *args) {
     return 0;
   }
   else {
-    int count, start;
+    int count, addr;
     sscanf(arg1, "%d", &count);
-    sscanf(arg2, "%x", &start);
-    printf("%d\n%x\n", count, start);
+    sscanf(arg2, "%x", &addr);
+    for(;count>0;count--){
+      printf("0x%x\t0x%x", addr, vaddr_read(addr, 1));
+      addr += 4;
+    }
   }
   return 0;
 }
