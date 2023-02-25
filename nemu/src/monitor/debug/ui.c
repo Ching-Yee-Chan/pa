@@ -36,6 +36,29 @@ static int cmd_q(char *args) {
   return -1;
 }
 
+// static int cmd_si(char *args) {
+//   /* extract the first argument */
+//   char *arg = strtok(NULL, " ");
+//   int i;
+
+//   if (arg == NULL) {
+//     /* no argument given */
+//     for (i = 0; i < NR_CMD; i ++) {
+//       printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+//     }
+//   }
+//   else {
+//     for (i = 0; i < NR_CMD; i ++) {
+//       if (strcmp(arg, cmd_table[i].name) == 0) {
+//         printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+//         return 0;
+//       }
+//     }
+//     printf("Unknown command '%s'\n", arg);
+//   }
+//   return 0;
+// }
+
 static int cmd_help(char *args);
 
 static struct {
@@ -48,7 +71,12 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
-
+  // { "si", "Execute and pause after N commands, N is set to 1 as default", cmd_si },
+  // { "info", "Display register status (r) or information of the watching points (w)", cmd_info },
+  // { "p", "Caluculate the value of the expression", cmd_p },
+  // { "x", "Memory scanning", cmd_x },
+  // { "w", "Set a watching point", cmd_w },
+  // { "d", "Delete a watching point", cmd_d },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))
