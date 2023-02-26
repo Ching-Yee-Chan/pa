@@ -106,7 +106,7 @@ static int cmd_p(char *args) {
     printf("%d\n", ans);
   }
   else{
-    printf("Cannot recognize the pattern!");
+    printf("Cannot recognize the pattern!\n");
   }
   return 0;
 }
