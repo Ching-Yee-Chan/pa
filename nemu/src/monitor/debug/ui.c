@@ -99,9 +99,15 @@ static int cmd_x(char *args) {
 }
 
 static int cmd_p(char *args) {
-  /* extract the first argument */
   char *arg = strtok(NULL, "\n");
-  printf("%s\n", arg);
+  bool success = false;
+  int ans = expr(arg, &success);
+  if(success){
+    printf("%d\n", ans);
+  }
+  else{
+    printf("Cannot recognize the pattern!");
+  }
   return 0;
 }
 
