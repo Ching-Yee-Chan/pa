@@ -100,7 +100,7 @@ static bool make_token(char *e) {
             }
             tokens[nr_token].type = rules[i].token_type;
             strncpy(tokens[nr_token].str, substr_start, substr_len);
-            // printf("%d\t%s\n", tokens[nr_token].type, tokens[nr_token].str);
+            printf("%d\t%s\n", tokens[nr_token].type, tokens[nr_token].str);
             nr_token++;
         }
 
@@ -155,7 +155,6 @@ uint32_t eval(int p,int q) {
     uint32_t ret = 0;
     switch(tokens[p].type){
       case TK_INT:
-        printf("%spppp\n", tokens[p].str);
         sscanf(tokens[p].str, "%d", &ret);
         return ret;
       case TK_HEX:
