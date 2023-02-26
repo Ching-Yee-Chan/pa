@@ -111,6 +111,87 @@ static bool make_token(char *e) {
   return true;
 }
 
+bool check_parentheses(int p,int q){
+  int count = 0;
+  for(int i = p;i<q;i++){
+    if(tokens[p].type=='('){
+      count++;
+    }
+    else if(tokens[p].type==')'){
+      count--;
+    }
+    if(count<=0){
+      if(count<0){  //brankets unmatched
+        printf("( and ) unmatched!");
+        assert(0);
+      }
+      else return false;  //not in the (<expr>) format
+    }
+  }
+  if(count != 1 || tokens[q].type!=')'){
+    printf("( and ) unmatched!");
+    assert(0);
+  }
+  return true;
+}
+
+int eval(int p,int q) {
+  if (p>q) {
+    /* Bad expression */
+    printf("Bad expression");
+    assert(0);
+  }
+  else if (p == q){
+    /* Single token.
+     * For now this token should be a number.
+     *Return the value of the number.
+     */
+    int ret = 0;
+    sscanf(tokens[p].str, "%d", &ret);
+    return ret;
+  }
+  else if (check_parentheses(p,q) == true) {
+    /* The expression is surrounded by a matched pair of parentheses.
+     * If that is the case, just throw away the parentheses.
+     */
+    return eval(p + 1,q - 1);
+  }
+  else {
+    int addLevel = -1;  //add level pos
+    int mulLevel = -1;  //mul level pos
+    int numBranket = 0;
+    for(int i = p;i<=q;i++){
+      if(tokens[i].type=='('){
+        numBranket++;
+        continue;
+      }
+      else if(tokens[i].type==')'){
+        numBranket--;
+        continue;
+      }
+      else if(!numBranket){//not in brankets
+        if(tokens[i].type=='+' || tokens[i].type=='-'){
+          addLevel = i;
+        }
+        else{
+          mulLevel = i;
+        }
+      }
+    }
+    int op = addLevel>=0 ? addLevel : mulLevel;
+    assert(op>=0);
+    int val1 = eval(p, op - 1);
+    int val2 = eval(op + 1, q);
+    switch (tokens[op].type) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*': return val1 * val2;
+      case '/': return val1 / val2;
+      default: assert(0);
+    }
+  }
+}
+
 uint32_t expr(char *e, bool *success) {
   if (!make_token(e)) {
     *success = false;
@@ -118,7 +199,8 @@ uint32_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
-
-  return 0;
+  // TODO();
+  int ret = eval(0, nr_token - 1);
+  *success = true;
+  return ret;
 }
