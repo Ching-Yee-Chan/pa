@@ -59,8 +59,20 @@ WP* getByNo(int idx) {
 }
 
 bool checkWP(){
+  bool ret = false;
   for(WP* i = head;i!=NULL;i = i->next){
-    printf("%s\n", i->expr);
+    bool success = true;
+    uint32_t ans = expr(i->expr, &success);
+    if(success){
+      if(ans != i->value){
+        printf("Watchpoint NO: %d\texpr: %s\t%u->%u\n", i->NO, i->expr, i->value, ans);
+        i->value = ans;
+        ret = true;
+      }
+    }
+    else{
+      assert(0);  //should not reach here
+    }
   }
-  return false;
+  return ret;
 }
