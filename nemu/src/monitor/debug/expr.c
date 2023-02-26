@@ -29,8 +29,8 @@ static struct rule {
   {"&&", TK_AND}, 
   {"\\|\\|", TK_OR}, 
   {"!", TK_NOT}, 
-  {"[1-9][0-9]*|0", TK_INT}, //integer
   {"0x[0-9a-fA-F][0-9a-fA-F]*", TK_HEX}, //hex
+  {"[1-9][0-9]*|0", TK_INT}, //integer
   {"$[a-zA-z]+", TK_REG}, //register
   {"-", '-'},  //sub
   {"\\*", '*'}, //mul
