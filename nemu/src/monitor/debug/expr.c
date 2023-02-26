@@ -311,6 +311,7 @@ uint32_t expr(char *e, bool *success) {
       tokens[i - 1].type != TK_REG &&
       tokens[i - 1].type != ')'))){
         tokens[i].type = TK_NGTIVE;
+        printf("Here\n");
       }
   }
   return eval(0, nr_token - 1);
