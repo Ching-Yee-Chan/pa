@@ -101,7 +101,7 @@ static int cmd_x(char *args) {
 static int cmd_p(char *args) {
   char *arg = strtok(NULL, "\n");
   bool success = true;
-  int ans = expr(arg, &success);
+  uint32_t ans = expr(arg, &success);
   if(success){
     printf("%d\n", ans);
   }
