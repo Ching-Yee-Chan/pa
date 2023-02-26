@@ -29,8 +29,8 @@ static struct rule {
   {"-", '-'},  //sub
   {"\\*", '*'}, //mul
   {"/", '/'}, //div
-  {"(", '('}, //lbranket
-  {")", ')'}  //rbranket
+  {"\\(", '('}, //lbranket
+  {"\\)", ')'}  //rbranket
 };
 
 #define NR_REGEX (sizeof(rules) / sizeof(rules[0]) )
