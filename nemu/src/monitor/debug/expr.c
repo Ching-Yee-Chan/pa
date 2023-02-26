@@ -10,7 +10,7 @@ enum {
   TK_NOTYPE = 256, TK_EQ,
 
   /* TODO: Add more token types */
-  TK_INT
+  TK_NEQ, TK_OR, TK_AND, TK_NOT, TK_NGTIVE, TK_DEREF, TK_INT, TK_HEX, TK_REG
 };
 
 static struct rule {
@@ -25,7 +25,13 @@ static struct rule {
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
   {"==", TK_EQ},         // equal
+  {"!=", TK_NEQ}, //not equal
+  {"&&", TK_AND}, 
+  {"\\|\\|", TK_OR}, 
+  {"!", TK_NOT}, 
   {"[1-9][0-9]*|0", TK_INT}, //integer
+  {"0x[0-9a-fA-F][0-9a-fA-F]*", TK_HEX}, //hex
+  {"$[a-zA-z]+", TK_REG}, //register
   {"-", '-'},  //sub
   {"\\*", '*'}, //mul
   {"/", '/'}, //div
@@ -135,7 +141,7 @@ bool check_parentheses(int p,int q){
   return true;
 }
 
-int eval(int p,int q) {
+uint32_t eval(int p,int q) {
   if (p>q) {
     /* Bad expression */
     printf("Bad expression");
@@ -146,9 +152,43 @@ int eval(int p,int q) {
      * For now this token should be a number.
      *Return the value of the number.
      */
-    int ret = 0;
-    sscanf(tokens[p].str, "%d", &ret);
-    return ret;
+    uint32_t ret = 0;
+    switch(tokens[p].type){
+      case TK_INT:
+        sscanf(tokens[p].str, "%d", &ret);
+        return ret;
+      case TK_HEX:
+        sscanf(tokens[p].str, "%x", &ret);
+        return ret;
+      case TK_REG:
+        if(strcasecmp(tokens[p].str, "$eax")==0){
+          return cpu.eax;
+        }
+        else if(strcasecmp(tokens[p].str, "$ecx")==0){
+          return cpu.ecx;
+        }
+        else if(strcasecmp(tokens[p].str, "$edx")==0){
+          return cpu.edx;
+        }
+        else if(strcasecmp(tokens[p].str, "$ebx")==0){
+          return cpu.ebx;
+        }
+        else if(strcasecmp(tokens[p].str, "$esp")==0){
+          return cpu.esp;
+        }
+        else if(strcasecmp(tokens[p].str, "$ebp")==0){
+          return cpu.ebp;
+        }
+        else if(strcasecmp(tokens[p].str, "$esi")==0){
+          return cpu.esi;
+        }
+        else if(strcasecmp(tokens[p].str, "$edi")==0){
+          return cpu.edi;
+        }
+      default:
+        printf("Invalid operand!\n");
+        assert(0);
+    }
   }
   else if (check_parentheses(p,q) == true) {
     /* The expression is surrounded by a matched pair of parentheses.
@@ -157,8 +197,12 @@ int eval(int p,int q) {
     return eval(p + 1,q - 1);
   }
   else {
-    int addLevel = -1;  //add level pos
-    int mulLevel = -1;  //mul level pos
+    int singleLevel = -1; //* - !
+    int mulLevel = -1;  //* /
+    int addLevel = -1;  //+ -
+    int andLevel = -1;  //&&
+    int orLevel = -1;  //||
+    int equalLevel = -1;  //== !=
     int numBranket = 0;
     for(int i = p;i<=q;i++){
       if(tokens[i].type=='('){
@@ -174,24 +218,72 @@ int eval(int p,int q) {
         continue;
       }
       else if(!numBranket){//not in brankets
-        if(tokens[i].type=='+' || tokens[i].type=='-'){
-          addLevel = i;
-        }
-        else{
+        switch (tokens[i].type)
+        {
+        case TK_DEREF: case TK_NGTIVE: case TK_NOT:
+          singleLevel = i;
+          break;
+        case '*': case '/':
           mulLevel = i;
+          break;
+        case '+': case '-':
+          addLevel = i;
+          break;
+        case TK_AND:
+          andLevel = i;
+          break;
+        case TK_OR:
+          orLevel = i;
+          break;
+        case TK_EQ: case TK_NEQ:
+          equalLevel = i;
+          break;
         }
       }
     }
-    int op = addLevel>=0 ? addLevel : mulLevel;
+    int op = singleLevel;
+    if(mulLevel>=0){
+      op = mulLevel;
+    }
+    else if(addLevel>=0){
+      op = addLevel;
+    }
+    else if(andLevel>=0){
+      op = andLevel;
+    }
+    else if(orLevel>=0){
+      op = orLevel;
+    }
+    else if(equalLevel>=0){
+      op = equalLevel;
+    }
     assert(op>=0);
-    int val1 = eval(p, op - 1);
-    int val2 = eval(op + 1, q);
+    uint32_t val2 = eval(op + 1, q);
+    if(op==0){  //* - !
+      switch (tokens[0].type)
+      {
+      case TK_DEREF:
+        return vaddr_read(val2, 4);
+      case TK_NGTIVE:
+        return -val2;
+      case TK_NOT:
+        return !val2;
+      default:
+        printf("Invalid single opcode!\n");
+        assert(0);
+      }
+    }
+    uint32_t val1 = eval(p, op - 1);
     printf("%d\t%d\n", val1, val2);
     switch (tokens[op].type) {
       case '+': return val1 + val2;
       case '-': return val1 - val2;
       case '*': return val1 * val2;
       case '/': return val1 / val2;
+      case TK_EQ: return val1 == val2;
+      case TK_NEQ: return val1 != val2;
+      case TK_AND: return val1 && val2;
+      case TK_OR: return val1 || val2;
       default: assert(0);
     }
   }
@@ -205,7 +297,21 @@ uint32_t expr(char *e, bool *success) {
 
   /* TODO: Insert codes to evaluate the expression. */
   // TODO();
-  int ret = eval(0, nr_token - 1);
-  *success = true;
-  return ret;
+  for (int i = 0; i < nr_token; i ++) {
+    if (tokens[i].type == '*' && 
+      (i == 0 || (tokens[i - 1].type != TK_INT && 
+      tokens[i - 1].type != TK_HEX && 
+      tokens[i - 1].type != TK_REG &&
+      tokens[i - 1].type != ')'))){
+        tokens[i].type = TK_DEREF;
+      }
+    else if (tokens[i].type == '-' && 
+      (i == 0 || (tokens[i - 1].type != TK_INT && 
+      tokens[i - 1].type != TK_HEX && 
+      tokens[i - 1].type != TK_REG &&
+      tokens[i - 1].type != ')'))){
+        tokens[i].type = TK_NGTIVE;
+      }
+  }
+  return eval(0, nr_token - 1);
 }
