@@ -144,7 +144,7 @@ bool check_parentheses(int p,int q){
 uint32_t eval(int p,int q) {
   if (p>q) {
     /* Bad expression */
-    printf("Bad expression");
+    printf("Bad expression\n");
     assert(0);
   }
   else if (p == q){
@@ -311,7 +311,6 @@ uint32_t expr(char *e, bool *success) {
       tokens[i - 1].type != TK_REG &&
       tokens[i - 1].type != ')'))){
         tokens[i].type = TK_NGTIVE;
-        printf("Here\n");
       }
   }
   return eval(0, nr_token - 1);
