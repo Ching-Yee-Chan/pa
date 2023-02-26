@@ -260,7 +260,7 @@ uint32_t eval(int p,int q) {
     assert(op>=0);
     uint32_t val2 = eval(op + 1, q);
     if(op==p){  //* - !
-      switch (tokens[0].type)
+      switch (tokens[op].type)
       {
       case TK_DEREF:
         return vaddr_read(val2, 4);
