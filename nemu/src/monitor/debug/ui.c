@@ -98,6 +98,13 @@ static int cmd_x(char *args) {
   return 0;
 }
 
+static int cmd_p(char *args) {
+  /* extract the first argument */
+  char *arg = strtok(NULL, "\n");
+  printf("%s\n", arg);
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -112,7 +119,7 @@ static struct {
   /* TODO: Add more commands */
   { "si", "Execute and pause after N commands, N is set to 1 as default", cmd_si },
   { "info", "Display register status (r) or information of the watching points (w)", cmd_info },
-  // { "p", "Caluculate the value of the expression", cmd_p },
+  { "p", "Caluculate the value of the expression", cmd_p },
   { "x", "Memory scanning", cmd_x },
   // { "w", "Set a watching point", cmd_w },
   // { "d", "Delete a watching point", cmd_d },
