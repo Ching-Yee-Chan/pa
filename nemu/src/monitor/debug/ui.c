@@ -111,6 +111,12 @@ static int cmd_p(char *args) {
   return 0;
 }
 
+static int cmd_w(char *args) {
+  WP* wp = new_wp();
+  wp->expr = strtok(NULL, "\n");
+  return 0;
+}
+
 static int cmd_help(char *args);
 
 static struct {
@@ -127,7 +133,7 @@ static struct {
   { "info", "Display register status (r) or information of the watching points (w)", cmd_info },
   { "p", "Caluculate the value of the expression", cmd_p },
   { "x", "Memory scanning", cmd_x },
-  // { "w", "Set a watching point", cmd_w },
+  { "w", "Set a watching point", cmd_w },
   // { "d", "Delete a watching point", cmd_d },
 };
 

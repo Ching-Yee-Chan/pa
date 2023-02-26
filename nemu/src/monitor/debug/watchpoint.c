@@ -20,4 +20,31 @@ void init_wp_pool() {
 
 /* TODO: Implement the functionality of watchpoint */
 
+WP* new_wp(){
+  if(!free_){
+    printf("Number of watchpoint exceeded! (max: 32)\n");
+    assert(0);
+  }
+  WP* newWP = free_;
+  free_ = free_->next;
+  newWP->next = head;
+  head = newWP;
+  return head;
+}
 
+void free_wp(WP* wp){
+  for(WP* i = head;i!=NULL;i = i->next){
+    if(i->next == wp){
+      i->next = wp->next;
+    }
+  }
+  wp->next = free_;
+  free_ = wp;
+}
+
+bool checkWP(){
+  for(WP* i = head;i!=NULL;i = i->next){
+    printf("%s\n", i->expr);
+  }
+  return false;
+}
