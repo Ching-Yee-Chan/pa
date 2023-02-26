@@ -1,5 +1,6 @@
 #include "monitor/watchpoint.h"
 #include "monitor/expr.h"
+#include<stdlib.h>
 
 #define NR_WP 32
 
@@ -33,6 +34,9 @@ WP* new_wp(){
 }
 
 void free_wp(WP* wp){
+  if(wp->expr){
+    free(wp->expr);
+  }
   for(WP* i = head;i!=NULL;i = i->next){
     if(i->next == wp){
       i->next = wp->next;

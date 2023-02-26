@@ -113,7 +113,9 @@ static int cmd_p(char *args) {
 
 static int cmd_w(char *args) {
   WP* wp = new_wp();
-  wp->expr = strtok(NULL, "\n");
+  char* arg = strtok(NULL, "\n");
+  wp->expr = malloc(strlen(arg)+1);
+  strcpy(wp->expr, arg);
   printf("%s\n", wp->expr);
   return 0;
 }
