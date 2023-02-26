@@ -116,7 +116,15 @@ static int cmd_w(char *args) {
   char* arg = strtok(NULL, "\n");
   wp->expr = malloc(strlen(arg)+1);
   strcpy(wp->expr, arg);
-  printf("%s\n", wp->expr);
+  return 0;
+}
+
+static int cmd_d(char *args) {
+  char* arg = strtok(NULL, "\n");
+  int num = -1;
+  sscanf(arg, "%d", &num);
+  WP* point = getByNo(num);
+  free_wp(point);
   return 0;
 }
 
@@ -137,7 +145,7 @@ static struct {
   { "p", "Caluculate the value of the expression", cmd_p },
   { "x", "Memory scanning", cmd_x },
   { "w", "Set a watching point", cmd_w },
-  // { "d", "Delete a watching point", cmd_d },
+  { "d", "Delete a watching point", cmd_d },
 };
 
 #define NR_CMD (sizeof(cmd_table) / sizeof(cmd_table[0]))

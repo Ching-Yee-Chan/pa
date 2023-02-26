@@ -46,9 +46,18 @@ void free_wp(WP* wp){
   free_ = wp;
 }
 
+WP* getByNo(int idx) {
+  for(WP* i = head;i!=NULL;i = i->next){
+    if(i->NO == idx){
+      return i;
+    }
+  }
+  return NULL;
+}
+
 bool checkWP(){
   for(WP* i = head;i!=NULL;i = i->next){
-    printf("%shello\n", i->expr);
+    printf("%s\n", i->expr);
   }
   return false;
 }
