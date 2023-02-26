@@ -116,6 +116,15 @@ static int cmd_w(char *args) {
   char* arg = strtok(NULL, "\n");
   wp->expr = malloc(strlen(arg)+1);
   strcpy(wp->expr, arg);
+  bool success = true;
+  wp->value = expr(arg, &success);
+  if(success){
+    printf("NO: %d\tinit val: %u\n", wp->NO, wp->value);
+  }
+  else{
+    printf("Cannot recognize the pattern! Insertion failed!\n");
+    free_wp(wp);
+  }
   return 0;
 }
 
