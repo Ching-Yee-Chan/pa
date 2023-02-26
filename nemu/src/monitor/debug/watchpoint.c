@@ -76,3 +76,9 @@ bool checkWP(){
   }
   return ret;
 }
+
+void showWP(){
+  for(WP* i = head;i!=NULL;i = i->next){
+    printf("Hardware watchpoint %d: %s\n", i->NO, i->expr);
+  }
+}

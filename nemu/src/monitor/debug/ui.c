@@ -68,7 +68,7 @@ static int cmd_info(char *args) {
     printf("eip\t0x%x\t0x%x\n", cpu.eip, cpu.eip);
   }
   else if(strcmp(arg, "w") == 0){
-    // TODO
+    showWP();
   }
   else{
     printf("Invalid arguments\n");
@@ -119,7 +119,7 @@ static int cmd_w(char *args) {
   bool success = true;
   wp->value = expr(arg, &success);
   if(success){
-    printf("NO: %d\tinit val: %u\n", wp->NO, wp->value);
+    printf("Hardware watchpoint %d: %s\n", wp->NO, wp->expr);
   }
   else{
     printf("Cannot recognize the pattern! Insertion failed!\n");
