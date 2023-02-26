@@ -155,6 +155,7 @@ uint32_t eval(int p,int q) {
     uint32_t ret = 0;
     switch(tokens[p].type){
       case TK_INT:
+        printf("%spppp\n", tokens[p].str);
         sscanf(tokens[p].str, "%d", &ret);
         return ret;
       case TK_HEX:
