@@ -103,7 +103,7 @@ static int cmd_p(char *args) {
   bool success = true;
   uint32_t ans = expr(arg, &success);
   if(success){
-    printf("%d\n", ans);
+    printf("%u\n", ans);
   }
   else{
     printf("Cannot recognize the pattern!\n");
