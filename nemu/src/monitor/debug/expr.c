@@ -167,6 +167,10 @@ int eval(int p,int q) {
       }
       else if(tokens[i].type==')'){
         numBranket--;
+        if(numBranket<0){
+          printf("( and ) unmatched!\n");
+          assert(0);
+        }
         continue;
       }
       else if(!numBranket){//not in brankets
