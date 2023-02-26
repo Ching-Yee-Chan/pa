@@ -245,20 +245,20 @@ uint32_t eval(int p,int q) {
       }
     }
     int op = singleLevel;
-    if(mulLevel>=0){
-      op = mulLevel;
-    }
-    else if(addLevel>=0){
-      op = addLevel;
-    }
-    else if(andLevel>=0){
-      op = andLevel;
+    if(equalLevel>=0){
+      op = equalLevel;
     }
     else if(orLevel>=0){
       op = orLevel;
     }
-    else if(equalLevel>=0){
-      op = equalLevel;
+    else if(andLevel>=0){
+      op = andLevel;
+    }
+    else if(addLevel>=0){
+      op = addLevel;
+    }
+    else if(mulLevel>=0){
+      op = mulLevel;
     }
     assert(op>=0);
     uint32_t val2 = eval(op + 1, q);
