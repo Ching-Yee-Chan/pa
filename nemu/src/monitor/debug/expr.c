@@ -258,6 +258,7 @@ uint32_t eval(int p,int q) {
       op = equalLevel;
     }
     assert(op>=0);
+    printf("%d\n", op);
     uint32_t val2 = eval(op + 1, q);
     if(op==p){  //* - !
       switch (tokens[op].type)
@@ -274,7 +275,7 @@ uint32_t eval(int p,int q) {
       }
     }
     uint32_t val1 = eval(p, op - 1);
-    printf("%d\t%d\n", val1, val2);
+    // printf("%d\t%d\n", val1, val2);
     switch (tokens[op].type) {
       case '+': return val1 + val2;
       case '-': return val1 - val2;
