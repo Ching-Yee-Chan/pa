@@ -114,22 +114,22 @@ static bool make_token(char *e) {
 bool check_parentheses(int p,int q){
   int count = 0;
   for(int i = p;i<q;i++){
-    if(tokens[p].type=='('){
+    if(tokens[i].type=='('){
       count++;
     }
-    else if(tokens[p].type==')'){
+    else if(tokens[i].type==')'){
       count--;
     }
     if(count<=0){
       if(count<0){  //brankets unmatched
-        printf("( and ) unmatched!");
+        printf("( and ) unmatched!\n");
         assert(0);
       }
       else return false;  //not in the (<expr>) format
     }
   }
   if(count != 1 || tokens[q].type!=')'){
-    printf("( and ) unmatched!");
+    printf("( and ) unmatched!\n");
     assert(0);
   }
   return true;
