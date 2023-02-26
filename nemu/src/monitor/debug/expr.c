@@ -221,7 +221,9 @@ uint32_t eval(int p,int q) {
         switch (tokens[i].type)
         {
         case TK_DEREF: case TK_NGTIVE: case TK_NOT:
-          singleLevel = i;
+          if(singleLevel<0){
+            singleLevel = i;
+          }
           break;
         case '*': case '/':
           mulLevel = i;
