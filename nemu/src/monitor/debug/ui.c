@@ -124,7 +124,12 @@ static int cmd_d(char *args) {
   int num = -1;
   sscanf(arg, "%d", &num);
   WP* point = getByNo(num);
-  free_wp(point);
+  if(point){
+    free_wp(point);
+  }
+  else{
+    printf("No watchpoint with id %d!\n", num);
+  }
   return 0;
 }
 
