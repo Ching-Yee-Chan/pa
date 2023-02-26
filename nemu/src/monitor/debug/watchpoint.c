@@ -44,7 +44,7 @@ void free_wp(WP* wp){
 
 bool checkWP(){
   for(WP* i = head;i!=NULL;i = i->next){
-    printf("%s\n", i->expr);
+    printf("%shello\n", i->expr);
   }
   return false;
 }
